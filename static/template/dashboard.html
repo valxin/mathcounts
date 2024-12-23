@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Access Code</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="/" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="/" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+      <a href="/mathcounts.html" class="w3-bar-item w3-button"><i class="fa fa-graduation-cap"></i> MATHCOUNTS</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="/" onclick="w3_close()" class="w3-bar-item w3-button">HOME</a>
+  <a href="/mathcounts.html" onclick="w3_close()" class="w3-bar-item w3-button">MATHCOUNTS</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<div class="w3-container w3-center w3-dark-grey" style="padding:80px 16px" id="dashboard">
+  {% if error != "" %}
+    <div class="w3-center w3-large w3-black" style="margin:32px 0px 32px 0px;">{{ error }}</div>
+    <p><button class="w3-button w3-black w3-padding-large" onclick="window.location.href='/#signin';">Back</button></p>
+  {% else %}
+    <h3>MY DASHBOARD</h3>
+    <p class="w3-large">Click "Submit" to join the leader board with your nickname, each time you have a new score.</p>
+
+    <div class="w3-row-padding" style="margin-top:32px">
+      <form method="POST" name ="frmCountdown" action="/countdown">
+    <div class="w3-third w3-section">
+      <form method="POST" name ="frmCountdown" action="/countdown">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">COUNT DOWN ROUND</li>
+
+        {% for item in countdowns %}
+          {% set post_loop = loop %}
+          {% if post_loop.index == 1 or item['level'] != countdowns[post_loop.index-2]['level'] or item['year'] != countdowns[post_loop.index-2]['year'] %}
+            <li class="w3-padding-16">
+              <p class="w3-large"><b>{{ item['level'] }} - {{ item['year'] }}</b></p>
+              <table style="width: 100%">
+                <tr class="w3-black" >
+                  <th>Question</th>
+                  <th>Time</th>
+                  <th>Date</th>
+                </tr>
+          {% endif %}
+                <tr class="w3-gray">
+                  <td>{{ item['question_no'] }}</td>
+                  <td>{{ item['time_used'] }}</td>
+                  <td>{{ item['score_time'] }}</td>
+                </tr>
+          {% if post_loop.last or item['level'] != countdowns[post_loop.index]['level'] or item['year'] != countdowns[post_loop.index-2]['year'] %}
+              </table>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+      </ul>
+      </form>
+    </div>
+    <div class="w3-third w3-section">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">SPRINT ROUND</li>
+
+        {% for item in sprints %}
+          {% set post_loop = loop %}
+          {% if post_loop.index == 1 or item['level'] != sprints[post_loop.index-2]['level'] or item['year'] != sprints[post_loop.index-2]['year'] %}
+            <li class="w3-padding-16">
+              <p class="w3-large"><b>{{ item['level'] }} - {{ item['year'] }}</b></p>
+              <table style="width: 100%">
+                <tr class="w3-black" >
+                  <th>Score</th>
+                  <th>Date</th>
+                </tr>
+          {% endif %}
+                <tr class="w3-gray">
+                  <td>{{ item['score'] }}</td>
+                  <td>{{ item['score_time'] }}</td>
+                </tr>
+          {% if post_loop.last or item['level'] != sprints[post_loop.index]['level'] or item['year'] != sprints[post_loop.index]['year'] %}
+              </table>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+      </ul>
+    </div>
+    <div class="w3-third w3-section">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">TARGET ROUND</li>
+
+        {% for item in targets %}
+          {% set post_loop = loop %}
+          {% if post_loop.index == 1 or item['level'] != targets[post_loop.index-2]['level'] or item['year'] != targets[post_loop.index-2]['year'] %}
+            <li class="w3-padding-16">
+              <p class="w3-large"><b>{{ item['level'] }} - {{ item['year'] }}</b></p>
+              <table style="width: 100%">
+                <tr class="w3-black" >
+                  <th>Score</th>
+                  <th>Date</th>
+                </tr>
+          {% endif %}
+                <tr class="w3-gray">
+                  <td>{{ item['score'] }}</td>
+                  <td>{{ item['score_time'] }}</td>
+                </tr>
+          {% if post_loop.last or item['level'] != targets[post_loop.index]['level'] or item['year'] != targets[post_loop.index]['year'] %}
+              </table>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+      </ul>
+    </div>
+      </form>
+    </div>
+  {% endif %}
+
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+  <div class="w3-xlarge w3-section">
+    <i class="fa fa-github w3-hover-opacity"></i>
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+  </div>
+  <p>Design and build by Valerie</p>
+</footer>
+
+<script>
+  // Modal Image Gallery
+  function onClick(element) {
+    document.getElementById("img01").src = element.src;
+    document.getElementById("modal01").style.display = "block";
+    var captionText = document.getElementById("caption");
+    captionText.innerHTML = element.alt;
+  }
+
+
+  // Toggle between showing and hiding the sidebar when clicking the menu icon
+  var mySidebar = document.getElementById("mySidebar");
+
+  function w3_open() {
+    if (mySidebar.style.display === 'block') {
+      mySidebar.style.display = 'none';
+    } else {
+      mySidebar.style.display = 'block';
+    }
+  }
+
+  // Close the sidebar with the close button
+  function w3_close() {
+      mySidebar.style.display = "none";
+  }
+</script>
+
+</body>
+</html>

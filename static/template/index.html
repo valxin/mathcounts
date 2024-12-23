@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JustStudy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/static/images/juststudyhomepagebg.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="#home" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="#signin" class="w3-bar-item w3-button"><i class="fa fa-user"></i> SIGN IN</a>
+      <a href="#mathcounts" class="w3-bar-item w3-button"><i class="fa fa-graduation-cap"></i> MATHCOUNTS</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="#signin" onclick="w3_close()" class="w3-bar-item w3-button">SIGN IN</a>
+  <a href="/mathcounts.html" onclick="w3_close()" class="w3-bar-item w3-button">MATHCOUNTS</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<!-- Header with full-height image -->
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-left w3-text-white" style="padding:48px">
+    <span class="w3-jumbo w3-hide-small">Unlock Your Math Potential </span><br>
+    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Unlock Your Math Potential </span><br>
+    <span class="w3-large">Elevate your skills, conquer competitions.</span>
+    <p><a href="#about" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Learn more and start today</a></p>
+  </div>
+  <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+</header>
+
+<!-- About Section -->
+<div class="w3-container" style="padding:128px 16px" id="about">
+  <h3 class="w3-center">ABOUT JUSTSTUDY</h3>
+  <p class="w3-center w3-large">A little background</p>
+  <div class="w3-row-padding w3-center" style="margin-top:64px">
+    <div class="w3-quarter">
+      <i class="fa fa-desktop w3-margin-bottom w3-jumbo w3-center"></i>
+      <p class="w3-large">Who</p>
+      <p> I am a passionate high school student dedicated to spreading and helping you excel at math competitions.  </p>
+    </div>
+    <div class="w3-quarter">
+      <i class="fa fa-heart w3-margin-bottom w3-jumbo"></i>
+      <p class="w3-large">Passion</p>
+      <p>Discover your calling to competition math, where you can discover new challenges and elevate your mathematical prowess.</p>
+    </div>
+    <div class="w3-quarter">
+      <i class="fa fa-diamond w3-margin-bottom w3-jumbo"></i>
+      <p class="w3-large">Design</p>
+      <p>Consists of targeted practices, challenging problems, and a competitive communitiy.</p>
+    </div>
+    <div class="w3-quarter">
+      <i class="fa fa-cog w3-margin-bottom w3-jumbo"></i>
+      <p class="w3-large">Support</p>
+      <p>Join us on this journey of mathematical excellence, where every equation is an opportunity, and every problem is a stepping stone to success. </p>
+    </div>
+  </div>
+</div>
+
+<!-- Mathcounts Section - "We know design" -->
+<div class="w3-container w3-light-grey" style="padding:128px 16px" id="mathcounts">
+  <div class="w3-row-padding">
+    <div class="w3-col m6">
+      <h3>MATHCOUNTS.</h3>
+      <p>Welcome to our MathCounts Countdown Round Practice, where precision meets speed in a thrilling mathematical showdown! Sharpen your wits and quick thinking as you tackle rapid-fire math questions designed to challenge and inspire. Let the countdown begin! </p>
+      <p><a href="#signin" class="w3-button w3-black"><i class="fa fa-th"></i> Start Now </a></p>
+    </div>
+    <div class="w3-col m6">
+      <img class="w3-image w3-round-large" src="/static/images/mathcountshomepage2.jpg" alt="Buildings" width="700" height="394">
+    </div>
+  </div>
+</div>
+
+<!-- Sign in Section -->
+<div class="w3-container w3-center w3-dark-grey" style="padding:128px 16px" id="signin">
+  <h3>SIGN IN</h3>
+  <p class="w3-large">Register as a new user, continue to sign in for existing user, or continue as a guest.</p>
+  <div class="w3-row-padding" style="margin-top:64px">
+    <div class="w3-third w3-section">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">GUEST</li>
+        <li class="w3-padding-16"><b>Welcome:</b> welcome to our site</li>
+        <li class="w3-padding-16"><b>Register:</b> please consider signing up with us</li>
+        <li class="w3-light-grey w3-padding-24">
+          <button class="w3-button w3-black w3-padding-large" onclick="guest()">
+            Continue as Guest
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="w3-third w3-section">
+      <form name="frmNewUser" onSubmit="return signUp()" method="POST">
+        <ul class="w3-ul w3-white w3-hover-shadow">
+          <li class="w3-black w3-xlarge w3-padding-32">NEW</li>
+          <li class="w3-padding-16"><b>Record:</b> track your progress</li>
+          <li class="w3-padding-16"><b>Contest:</b> join the leader board</li>
+          <li class="w3-padding-16"><b>Cost:</b> free</li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="text" placeholder="Nick Name" required name="name"></li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="text" placeholder="Email" required name="email"></li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="password" placeholder="Password" required name="pwd"></li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="password" placeholder="Retype Password" required name="retypePwd"></li>
+          <li class="w3-light-grey w3-padding-24">
+            <button class="w3-button w3-black w3-padding-large">Sign Up</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <div class="w3-third w3-section">
+      <form name="frmExistingUser" onSubmit="return signin()" method="POST">
+        <ul class="w3-ul w3-white w3-hover-shadow">
+          <li class="w3-black w3-xlarge w3-padding-32">EXISTING</li>
+          <li class="w3-padding-16"><b>Record:</b> view your progress</li>
+          <li class="w3-padding-16"><b>Contest:</b> view leader board position</li>
+          <li class="w3-padding-16"><b>Welcome:</b> welcome back</li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="text" placeholder="Email" required name="email"></li>
+          <li class="w3-padding-16"><input class="w3-input w3-border" type="password" placeholder="Password" required name="pwd"></li>
+          <li class="w3-light-grey w3-padding-24">
+            <button class="w3-button w3-black w3-padding-large">Sign In</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Section -->
+<div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
+  <h3 class="w3-center">CONTACT</h3>
+  <p class="w3-center w3-large">Lets get in touch. Send us a message:</p>
+  <div style="margin-top:48px">
+    <p><i class="fa fa-map-marker fa-fw w3-xxlarge w3-margin-right"></i> Broomfield, CO</p>
+    <p><i class="fa fa-envelope fa-fw w3-xxlarge w3-margin-right"> </i> Email: juststudy.net@gmail.com</p>
+    <br>
+    <form action="/contact" method="POST">
+      <p><input class="w3-input w3-border" type="text" placeholder="Name" required name="name"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="email"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Subject" required name="subject"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="message"></p>
+      <p>
+        <button class="w3-button w3-black" type="submit">
+          <i class="fa fa-paper-plane"></i> SEND MESSAGE
+        </button>
+      </p>
+    </form>
+    <!-- Image of location/map -->
+    <img src="/static/images/bottomhomepage.jpg" class="w3-image w3-greyscale" style="width:100%;margin-top:48px">
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+  <div class="w3-xlarge w3-section">
+    <i class="fa fa-github w3-hover-opacity"></i>
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+  </div>
+  <p>Design and build by Valerie</p>
+</footer>
+
+<script>
+  // Modal Image Gallery
+  function onClick(element) {
+    document.getElementById("img01").src = element.src;
+    document.getElementById("modal01").style.display = "block";
+    var captionText = document.getElementById("caption");
+    captionText.innerHTML = element.alt;
+  }
+
+
+  // Toggle between showing and hiding the sidebar when clicking the menu icon
+  var mySidebar = document.getElementById("mySidebar");
+
+  function w3_open() {
+    if (mySidebar.style.display === 'block') {
+      mySidebar.style.display = 'none';
+    } else {
+      mySidebar.style.display = 'block';
+    }
+  }
+
+  // Close the sidebar with the close button
+  function w3_close() {
+      mySidebar.style.display = "none";
+  }
+
+  function guest() {
+    window.location.href = "/mathcounts.html";
+  }
+
+  function signUp() {
+    if (document.frmNewUser.pwd.value == document.frmNewUser.retypePwd.value) {
+      document.frmNewUser.action = "/api/signUp";
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function signin() {
+    if (document.frmExistingUser.email.value != "" && document.frmExistingUser.pwd.value != "") {
+      document.frmExistingUser.action = "/api/signin";
+      return true;
+    } else {
+      return false;
+    }
+  }
+</script>
+
+</body>
+</html>

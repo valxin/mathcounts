@@ -1,2 +1,1 @@
-# mathcounts
-MathCounts
+# juststudy

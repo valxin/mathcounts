@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JustStudy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="/" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="/" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="/" onclick="w3_close()" class="w3-bar-item w3-button">HOME</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<!-- MathCounts Section -->
+<div class="w3-container w3-center w3-dark-grey" style="padding:128px 16px" id="mathcounts">
+  <h3>MATHCOUNTS</h3>
+  <p class="w3-large">Fun programs for grades 6-8!  Help students to prepare and practice tests.</p>
+  <div class="w3-row-padding" style="margin-top:64px">
+    <div class="w3-third w3-section">
+      <form method="POST" name ="frmCountdown" action="/countdown">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">COUNT DOWN ROUND</li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="level">
+            <option value="2">Chapter</option>
+            <option value="3">State</option>
+          </select>
+        </li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="year">
+            <option value="2023">2023</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+          </select>
+        </li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="start_no" id="start_no">
+            <option value="0">Random</option>
+          </select>
+        </li>
+        <li class="w3-light-grey w3-padding-24">
+          <button class="w3-button w3-black w3-padding-large"  onclick="startCountdown()">Start</button>
+        </li>
+      </ul>
+      </form>
+    </div>
+    <div class="w3-third w3-section">
+      <form method="POST" name ="frmSprint" action="/api/sprint">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">SPRINT ROUND</li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="level">
+            <option value="2">Chapter</option>
+            <option value="3">State</option>
+          </select>
+        </li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="year">
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+          </select>
+        </li>
+        <li class="w3-light-grey w3-padding-24">
+          <button class="w3-button w3-black w3-padding-large" onclick="startSprint()">Start</button>
+        </li>
+      </ul>
+      </form>
+    </div>
+    <div class="w3-third w3-section">
+      <form method="POST" name ="frmTarget" action="/api/target">
+      <ul class="w3-ul w3-white w3-hover-shadow">
+        <li class="w3-black w3-xlarge w3-padding-32">TARGET ROUND</li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="level">
+            <option value="2">Chapter</option>
+            <option value="3">State</option>
+          </select>
+        </li>
+        <li class="w3-padding-16">
+          <select class="w3-input w3-border" name="year">
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+          </select>
+        </li>        <li class="w3-light-grey w3-padding-24">
+          <button class="w3-button w3-black w3-padding-large" onclick="startTarget()">
+            Start
+          </button>
+        </li>
+      </ul>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+  <div class="w3-xlarge w3-section">
+    <i class="fa fa-github w3-hover-opacity"></i>
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+  </div>
+  <p>Design and build by Valerie</p>
+</footer>
+
+<script>
+  initOption()
+
+  // Modal Image Gallery
+  function onClick(element) {
+    document.getElementById("img01").src = element.src;
+    document.getElementById("modal01").style.display = "block";
+    var captionText = document.getElementById("caption");
+    captionText.innerHTML = element.alt;
+  }
+
+
+  // Toggle between showing and hiding the sidebar when clicking the menu icon
+  var mySidebar = document.getElementById("mySidebar");
+
+  function w3_open() {
+    if (mySidebar.style.display === 'block') {
+      mySidebar.style.display = 'none';
+    } else {
+      mySidebar.style.display = 'block';
+    }
+  }
+
+  // Close the sidebar with the close button
+  function w3_close() {
+      mySidebar.style.display = "none";
+  }
+
+  function startCountdown() {
+    document.frmCountdown.submit();
+  }
+
+  function startSprint() {
+    document.frmSprint.submit();
+  }
+
+  function startTarget() {
+    document.frmTarget.submit();
+  }
+
+  function initOption() {
+    var select = document.getElementById("start_no");
+
+    for(var i = 1; i <= 80; i++) {
+        var el = document.createElement("option");
+        el.textContent = i;
+        el.value = i;
+        select.appendChild(el);
+    }
+  }
+</script>
+
+</body>
+</html>

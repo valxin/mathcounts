@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MathCounts Target Round</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/static/images/mac.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="/" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="/" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+      <a href="/mathcounts.html" class="w3-bar-item w3-button"><i class="fa fa-graduation-cap"></i> MATHCOUNTS</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="/" onclick="w3_close()" class="w3-bar-item w3-button">HOME</a>
+  <a href="/mathcounts.html" onclick="w3_close()" class="w3-bar-item w3-button">MATHCOUNTS</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<!-- MathCount Count Down Section -->
+<div class="w3-container w3-dark-grey" style="padding:128px 16px" id="pricing">
+  <h3 class="w3-center">MATHCOUNTS TARGET ROUND</h3>
+  <p class="w3-large">
+    This section of the competition consists of 8 problems given in pairs of 2. You will have 6 minutes to complete each pair of problems. You may use a calculator.
+    Click the START button to start the timer and get the next pair.
+  </p>
+
+  <div class="w3-container w3-light-grey" style="padding:64px 32px; min-height: 600px; max-width: 800px; margin: 0 auto;">
+    <div id="startButton" class="w3-center">
+        <button class="w3-button w3-black" onclick="startTarget()">
+          <i class="fa fa-caret-square-o-right"></i> START
+        </button>
+    </div>
+    <div id="timer" class="w3-center w3-large w3-black" style="display: none;">06:00</div>
+
+    <div id="math-problem" style="display: none;">
+          <div id="question_set_1" >
+              <p class="w3-large" >
+                1. {{ questions[0]['question']|safe }}
+              </p>
+              {% if questions[0]['imageUrl'] != "" %}
+                <p><img src="{{questions[0]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-1" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-1" value="{{ questions[0]['answers'] }}">
+              <div id="result-1"></div>
+              <p>&nbsp;</p>
+
+              <p class="w3-large">
+                2. {{ questions[1]['question']|safe }}
+              </p>
+              {% if questions[1]['imageUrl'] != "" %}
+                <p><img src="{{questions[1]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-2" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-2" value="{{ questions[1]['answers'] }}">
+              <div id="result-2"></div>
+              <p>&nbsp;</p>
+              <div id="next_section_1" >
+                  <p>
+                    <button class="w3-button w3-black" onclick="nextSection(1)">
+                        <i class="fa fa-paper-plane"></i> NEXT
+                    </button>
+                  </p>
+              </div>
+          </div>
+
+          <div id="question_set_2" style="display: none;">
+              <p class="w3-large" >
+                3. {{ questions[2]['question']|safe }}
+              </p>
+              {% if questions[2]['imageUrl'] != "" %}
+                <p><img src="{{questions[2]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-3" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-3" value="{{ questions[2]['answers'] }}">
+              <div id="result-3"></div>
+              <p>&nbsp;</p>
+
+              <p class="w3-large">
+                4. {{ questions[3]['question']|safe }}
+              </p>
+              {% if questions[3]['imageUrl'] != "" %}
+                <p><img src="{{questions[3]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-4" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-4" value="{{ questions[3]['answers'] }}">
+              <div id="result-4"></div>
+              <p>&nbsp;</p>
+              <div id="next_section_2" >
+                  <p>
+                    <button class="w3-button w3-black" onclick="nextSection(2)">
+                        <i class="fa fa-paper-plane"></i> NEXT
+                    </button>
+                  </p>
+              </div>
+          </div>
+
+          <div id="question_set_3" style="display: none;">
+              <p class="w3-large" >
+                5. {{ questions[4]['question']|safe }}
+              </p>
+              {% if questions[4]['imageUrl'] != "" %}
+                <p><img src="{{questions[4]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-5" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-5" value="{{ questions[4]['answers'] }}">
+              <div id="result-5"></div>
+              <p>&nbsp;</p>
+
+              <p class="w3-large">
+                6. {{ questions[5]['question']|safe }}
+              </p>
+              {% if questions[5]['imageUrl'] != "" %}
+                <p><img src="{{questions[5]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-6" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-6" value="{{ questions[5]['answers'] }}">
+              <div id="result-6"></div>
+              <p>&nbsp;</p>
+              <div id="next_section_3" >
+                  <p>
+                    <button class="w3-button w3-black" onclick="nextSection(3)">
+                        <i class="fa fa-paper-plane"></i> NEXT
+                    </button>
+                  </p>
+              </div>
+          </div>
+
+        <div id="question_set_4" style="display: none;">
+              <p class="w3-large" >
+                7. {{ questions[6]['question']|safe }}
+              </p>
+              {% if questions[6]['imageUrl'] != "" %}
+                <p><img src="{{questions[6]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-7" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-7" value="{{ questions[6]['answers'] }}">
+              <div id="result-7"></div>
+              <p>&nbsp;</p>
+
+              <p class="w3-large">
+                8. {{ questions[7]['question']|safe }}
+              </p>
+              {% if questions[7]['imageUrl'] != "" %}
+                <p><img src="{{questions[7]['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+              {% endif %}
+              <p>
+                <input class="w3-input w3-border" type="text" id="answer-8" placeholder="Enter your answer">
+              </p>
+              <input type="hidden" id="answers-8" value="{{ questions[7]['answers'] }}">
+              <div id="result-8"></div>
+              <p>&nbsp;</p>
+              <div id="final-submit">
+                  <p>
+                    <button class="w3-button w3-black" onclick="submitAnswer()">
+                        <i class="fa fa-paper-plane"></i> SUBMIT
+                    </button>
+                  </p>
+              </div>
+          </div>
+    </div>
+
+    <div id="answer-section" style="display: none">
+      <p>
+          <button id="submitAnswer" class="w3-button w3-black" onclick="submitAnswer()">
+            <i class="fa fa-paper-plane"></i> SUBMIT ANSWER
+          </button>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+
+  <script>
+    var timer;
+    var duration = 360;
+
+    function startTimer(duration, display) {
+      var currTime = duration, minutes, seconds;
+      return setInterval(function () {
+        minutes = parseInt(currTime / 60, 10);
+        seconds = parseInt(currTime % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--currTime < 0) {
+          // Time is up, you can handle this event accordingly
+          clearInterval(timer);
+          display.textContent = "Time's up!";
+          showResult(false);
+        }
+      }, 1000);
+    }
+
+    function startTarget() {
+      document.getElementById("math-problem").style.display = "block";
+      document.getElementById("timer").style.display = "block";
+      document.getElementById("answer-section").style.display = "none";
+      document.getElementById("startButton").style.display = "none";
+
+      var display = document.querySelector('#timer');
+      timer = startTimer(duration, display);
+    }
+
+    function submitAnswer() {
+      clearInterval(timer);
+      for (let idx = 1; idx <= 3; idx++){
+        document.getElementById("question_set_" + idx).style.display = "block";
+        document.getElementById("next_section_" + idx).style.display = "none";
+      }
+      document.getElementById("final-submit").style.display = "none";
+
+      var total = 8;
+      var score = 0;
+
+      for (let idx = 1; idx <= total; idx++) {
+        var userAnswer = "|" + document.getElementById("answer-" + idx).value + "|";
+        var correctAnswer = "|" + document.getElementById("answers-" + idx).value + "|";
+
+        console.log("index: " + idx + "userAnswer: " + userAnswer + "correctAnswer: " + correctAnswer);
+        if (userAnswer && correctAnswer.includes(userAnswer)) {
+          score++;
+          showResult(idx, true);
+        } else {
+          showResult(idx, false);
+        }
+       }
+
+       document.querySelector('#timer').textContent = "Target Round Score: " + score;
+       submitScore(score);
+    }
+
+    function showResult(idx, isCorrect) {
+      var resultDiv = document.getElementById("result-" + idx);
+      var answers = document.getElementById("answers-" + idx).value.replaceAll("|", " or ");
+      resultDiv.textContent = isCorrect ? "Correct! Well done." : "Incorrect. The correct answer is: " + answers;
+
+      document.getElementById("submitAnswer").disabled = true;
+    }
+
+    function nextSection(index) {
+      clearInterval(timer);
+      var display = document.querySelector('#timer');
+      timer = startTimer(duration, display);
+
+      document.getElementById("question_set_" + index).style.display = "none";
+      document.getElementById("question_set_" + (index + 1)).style.display = "block";
+    }
+
+    function submitScore(score) {
+      var url = '/api/recordscore';
+      var data = new Object();
+      data.round_id = 2;
+      data.score = score;
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+      .catch(error => console.error('Error:', error));
+    }
+
+      // Modal Image Gallery
+      function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "block";
+        var captionText = document.getElementById("caption");
+        captionText.innerHTML = element.alt;
+      }
+
+      // Toggle between showing and hiding the sidebar when clicking the menu icon
+      var mySidebar = document.getElementById("mySidebar");
+
+      function w3_open() {
+        if (mySidebar.style.display === 'block') {
+          mySidebar.style.display = 'none';
+        } else {
+          mySidebar.style.display = 'block';
+        }
+      }
+
+      // Close the sidebar with the close button
+      function w3_close() {
+          mySidebar.style.display = "none";
+      }
+  </script>
+
+</html>

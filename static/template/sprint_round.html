@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MathCounts Sprint Round</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/static/images/mac.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="/" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="/" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+      <a href="/mathcounts.html" class="w3-bar-item w3-button"><i class="fa fa-graduation-cap"></i> MATHCOUNTS</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="/" onclick="w3_close()" class="w3-bar-item w3-button">HOME</a>
+  <a href="/mathcounts.html" onclick="w3_close()" class="w3-bar-item w3-button">MATHCOUNTS</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<!-- MathCount Count Down Section -->
+<div class="w3-container w3-dark-grey" style="padding:128px 16px" id="pricing">
+  <h3 class="w3-center">MATHCOUNTS SPRINT ROUND</h3>
+  <p class="w3-large">
+    This section of the competition consists of 30 problems. You will have 40 minutes to complete all the problems.
+    Click the START button to start the timer and get the set of questions.
+  </p>
+
+  <div class="w3-container w3-light-grey" style="padding:64px 32px; min-height: 600px; max-width: 800px; margin: 0 auto;">
+    <div id="startButton" class="w3-center">
+        <button class="w3-button w3-black" onclick="startSprint()">
+          <i class="fa fa-caret-square-o-right"></i> START
+        </button>
+    </div>
+    <div id="timer" class="w3-center w3-large w3-black" style="display: none;">40:00</div>
+
+    <div id="math-problem" style="display: none;">
+        {% for question in questions %}
+          {% set post_loop = loop %}
+          <p class="w3-large">
+            {{ post_loop.index }}. {{ question['question']|safe }}
+          </p>
+          {% if question['imageUrl'] != "" %}
+            <p><img src="{{question['imageUrl']}}" style='max-width: 90%; height: auto;' /></p>
+          {% endif %}
+          <p>
+            <input class="w3-input w3-border" type="text" id="answer-{{ post_loop.index }}" placeholder="Enter your answer">
+          </p>
+          <input type="hidden" id="answers-{{ post_loop.index }}" value="{{ question['answers'] }}">
+          <div id="result-{{ loop.index }}"></div>
+          <p>&nbsp;</p>
+        {% endfor %}
+        <input type="hidden" id="total" value="{{ total }}">
+    </div>
+
+    <div id="answer-section" style="display: none">
+      <p>
+          <button id="submitAnswer" class="w3-button w3-black" onclick="submitAnswer()">
+            <i class="fa fa-paper-plane"></i> SUBMIT ANSWER
+          </button>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+
+  <script>
+    var timer;
+    var duration = 2400;
+
+    function startTimer(duration, display) {
+      var currTime = duration, minutes, seconds;
+      return setInterval(function () {
+        minutes = parseInt(currTime / 60, 10);
+        seconds = parseInt(currTime % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--currTime < 0) {
+          // Time is up, you can handle this event accordingly
+          clearInterval(timer);
+          display.textContent = "Time's up!";
+          showResult(false);
+        }
+      }, 1000);
+    }
+
+    function startSprint() {
+      document.getElementById("math-problem").style.display = "block";
+      document.getElementById("timer").style.display = "block";
+      document.getElementById("answer-section").style.display = "block";
+      document.getElementById("startButton").style.display = "none";
+
+      var display = document.querySelector('#timer');
+      timer = startTimer(duration, display);
+    }
+
+    function submitAnswer() {
+      clearInterval(timer);
+
+      var total = document.getElementById("total").value;
+      var score = 0;
+
+      for (let idx = 1; idx <= total; idx++) {
+        var userAnswer = "|" + document.getElementById("answer-" + idx).value + "|";
+        var correctAnswer = "|" + document.getElementById("answers-" + idx).value + "|";
+
+        if (userAnswer && correctAnswer.includes(userAnswer)) {
+          score++;
+          showResult(idx, true);
+        } else {
+          showResult(idx, false);
+        }
+       }
+
+       document.querySelector('#timer').textContent = "Sprint Round Score: " + score;
+       submitScore(score);
+    }
+
+    function showResult(idx, isCorrect) {
+      var resultDiv = document.getElementById("result-" + idx);
+      var answers = document.getElementById("answers-" + idx).value.replaceAll("|", " or ");
+      resultDiv.textContent = isCorrect ? "Correct! Well done." : "Incorrect. The correct answer is: " + answers;
+
+      document.getElementById("submitAnswer").disabled = true;
+    }
+
+    function submitScore(score) {
+      var url = '/api/recordscore';
+      var data = new Object();
+      data.round_id = 1;
+      data.score = score;
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+      .catch(error => console.error('Error:', error));
+    }
+
+    function nextQuestion() {
+      window.location.replace("/countdown");
+    }
+
+      // Modal Image Gallery
+    function onClick(element) {
+      document.getElementById("img01").src = element.src;
+      document.getElementById("modal01").style.display = "block";
+      var captionText = document.getElementById("caption");
+      captionText.innerHTML = element.alt;
+    }
+
+
+    // Toggle between showing and hiding the sidebar when clicking the menu icon
+    var mySidebar = document.getElementById("mySidebar");
+
+    function w3_open() {
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+      } else {
+        mySidebar.style.display = 'block';
+      }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+    }
+  </script>
+
+</html>

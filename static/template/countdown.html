@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MathCounts Countdown Round</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/w3.css">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/static/images/mac.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="/" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-users fa-lg" aria-hidden="true"></i>&nbsp;<b>JUSTSTUDY.net</b>
+    </a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="/" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+      <a href="/mathcounts.html" class="w3-bar-item w3-button"><i class="fa fa-graduation-cap"></i> MATHCOUNTS</a>
+      <a href="/api/leaderboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> LEADERBOARD</a>
+      <a href="/api/dashboard" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> DASHBOARD</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="/" onclick="w3_close()" class="w3-bar-item w3-button">HOME</a>
+  <a href="/mathcounts.html" onclick="w3_close()" class="w3-bar-item w3-button">MATHCOUNTS</a>
+  <a href="/api/leaderboard" onclick="w3_close()" class="w3-bar-item w3-button">LEADERBOARD</a>
+  <a href="/api/dashboard" onclick="w3_close()" class="w3-bar-item w3-button">DASHBOARD</a>
+</nav>
+
+<!-- MathCount Count Down Section -->
+<div class="w3-container w3-dark-grey" style="padding:128px 16px" id="pricing">
+  <h3 class="w3-center">MATHCOUNTS COUNTDOWN ROUND</h3>
+  <p class="w3-large">
+    Focuses on speed and accuracy. Students have a maximum of 45 seconds per problem without a calculator.
+    Click START button to start timer and get the next random question.
+  </p>
+
+  <div class="w3-container w3-light-grey" style="padding:64px 32px; min-height: 600px; max-width: 800px; margin: 0 auto;">
+    <div id="startButton" class="w3-center">
+        <button class="w3-button w3-black" onclick="startChallenge()">
+          <i class="fa fa-caret-square-o-right"></i> START
+        </button>
+    </div>
+    <div id="timer" class="w3-center w3-large w3-black" style="display: none;">45</div>
+
+    <div id="raise-hand" class="w3-center" style="display: none">
+      <p>
+        <button class="w3-button" onclick="raiseHand()">
+          <img src="/static/images/button.png"  width="100" height="100"></img>
+        </button>
+      </p>
+    </div>
+
+    <div id="math-problem" style="display: none;">
+      <p class="w3-large">
+        {{ question_no }}. {{ question|safe }}
+      </p>
+      {% if imageUrl != "" %}
+        <p><img src="{{imageUrl}}" style='max-width: 90%; height: auto;' /></p>
+      {% endif %}
+    </div>
+
+    <div id="stopTime" class="w3-center w3-large w3-black" style="display: none;">Stopped at: </div>
+
+    <div id="answer-section" style="display: none">
+      <p class="w3-large">Your Answer:</p>
+      <p>
+        <input class="w3-input w3-border" type="text" id="answer" placeholder="Enter your answer">
+        <input type="hidden" id="question_id" value="{{ question_id }}">
+        <input type="hidden" id="answers" value="{{ answers }}">
+        <input type="hidden" id="question" value="{{ question|safe }}">
+      </p>
+
+      <p>
+          <button id="submitAnswer" class="w3-button w3-black" onclick="submitAnswer()">
+            <i class="fa fa-paper-plane"></i> SUBMIT ANSWER
+          </button>
+      </p>
+    </div>
+
+    <div id="result"></div>
+    <div id="nextButton" class="w3-center" style="display: none">
+      <button class="w3-button w3-black" onclick="nextQuestion()">
+          <i class="fa fa-random"></i> NEXT
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+
+  <script>
+    var timer;
+    var duration = 45;
+    var time_used = 0;
+    var question_time_used = 0;
+
+    document.getElementById("answer")
+        .addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            document.getElementById("submitAnswer").click();
+        }
+    });
+
+    function startTimer(duration, display) {
+      var currTime = duration, minutes, seconds;
+      return setInterval(function () {
+        minutes = parseInt(currTime / 60, 10);
+        seconds = parseInt(currTime % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+        time_used = duration - currTime;
+
+        console.log("time: " + currTime);
+
+        if (--currTime < 0) {
+          // Time is up, you can handle this event accordingly
+          clearInterval(timer);
+          display.textContent = "Time's up!";
+          showResult(false);
+        }
+      }, 1000);
+    }
+
+    function startChallenge() {
+      document.getElementById("math-problem").style.display = "block";
+      document.getElementById("timer").style.display = "block";
+      document.getElementById("startButton").style.display = "none";
+      document.getElementById("raise-hand").style.display = "block";
+      document.getElementById("result").style.display = "block";
+
+      var question = document.getElementById("question").value;
+      var msg = new SpeechSynthesisUtterance();
+      msg.text = "Here is the question.";
+      window.speechSynthesis.speak(msg);
+
+      var display = document.querySelector('#timer');
+      timer = startTimer(duration, display);
+
+      msg.text = question;
+      window.speechSynthesis.speak(msg);
+    }
+
+    function raiseHand() {
+      document.getElementById("answer-section").style.display = "block";
+      document.getElementById("raise-hand").style.display = "none";
+      document.getElementById("stopTime").style.display = "block";
+
+      var display = document.querySelector('#timer');
+      document.querySelector('#stopTime').textContent = "Stopped at: " + display.textContent;
+
+      if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = "The answer is.";
+            window.speechSynthesis.speak(msg);
+      }
+
+      question_time_used = time_used;
+      clearInterval(timer);
+      timer = startTimer(5, display);
+    }
+
+    function submitAnswer() {
+      var userAnswer = "|" + document.getElementById("answer").value + "|";
+      var correctAnswer = "|" + document.getElementById("answers").value + "|";
+      var questionId = document.getElementById("question_id").value
+
+      clearInterval(timer);
+
+      if (userAnswer && correctAnswer.includes(userAnswer)) {
+        showResult(true);
+        submitScore(questionId, question_time_used);
+      } else {
+        showResult(false);
+      }
+    }
+
+    function showResult(isCorrect) {
+      var resultDiv = document.getElementById("result");
+      var answers = document.getElementById("answers").value.replaceAll("|", " or ");
+      resultDiv.textContent = isCorrect ? "Correct! Well done." : "Incorrect. The correct answer is: " + answers;
+
+      document.getElementById("nextButton").style.display = "block";
+      document.getElementById("submitAnswer").disabled = true;
+    }
+
+    function nextQuestion() {
+      window.location.replace("/countdown");
+    }
+
+    function submitScore(question_id, time_used) {
+      var url = '/api/timescore';
+      var data = new Object();
+      data.question_id = question_id;
+      data.time_used = time_used;
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+      .catch(error => console.error('Error:', error));
+    }
+
+      // Modal Image Gallery
+    function onClick(element) {
+      document.getElementById("img01").src = element.src;
+      document.getElementById("modal01").style.display = "block";
+      var captionText = document.getElementById("caption");
+      captionText.innerHTML = element.alt;
+    }
+
+    // Toggle between showing and hiding the sidebar when clicking the menu icon
+    var mySidebar = document.getElementById("mySidebar");
+
+    function w3_open() {
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+      } else {
+        mySidebar.style.display = 'block';
+      }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+    }
+  </script>
+
+</html>
